@@ -31,24 +31,25 @@ Then output exactly one of:
 
 ## Procedure (do this every time)
 
-1. Build a **Context Snapshot** (keep it short):
-   - Last user request and your last response (if any)
-   - Current TODOs or unresolved issues you can infer
-   - Workspace snapshot:
-     - If the user has an active repo/workspace, list up to ~15 relevant files/dirs you already know are involved.
-     - If you are unsure, do a quick directory listing of the workspace root and/or relevant subfolder(s), but keep it minimal.
-   - If `{baseDir}/../../MEMORY.md` exists in the workspace (or a `MEMORY.md` near the project root), read only a small tail section (e.g., last 10 bullet lines) and include them.
+1. Build a **Context Snapshot** (STRICT token limits - max ~1200 tokens for context):
+   - **Recent conversation**: Use ONLY the last user message + your last response (2 turns max). Do not include earlier history.
+   - **Workspace**: List at most **5** files/directories. Only include files you know are actively being worked on. If unsure, skip entirely rather than listing everything.
+   - **MEMORY.md**: Only read if the last user message explicitly mentions memory, TODO, or unresolved tasks. If reading, limit to **last 3 bullet lines** maximum.
+   
+   ⚠️ **Hard Constraint**: If context would exceed ~1200 tokens, prioritize: conversation (keep) > file list (truncate first) > memory bullets (drop if needed).
 
 2. Decide if you should act proactively:
    - Default to **quiet**.
    - Only propose something if it saves time or avoids an error.
    - Prefer `[[SUGGESTION]]` over `[[AUTONOMOUS_TASK]]` unless the task is very small and clearly safe.
 
-3. Output format (MANDATORY):
+3. Output format (MANDATORY - be concise):
    - If no action is needed: respond with **ONLY** `[[NOTHING]]`.
    - Otherwise:
-     - `[[SUGGESTION]] ...` or
-     - `[[AUTONOMOUS_TASK]] ...`
+     - `[[SUGGESTION]] <brief suggestion under 100 tokens>` or
+     - `[[AUTONOMOUS_TASK]] <brief task description under 100 tokens>`
+   
+   Keep all outputs short. One sentence is enough.
 
 ## Safety / scope
 
