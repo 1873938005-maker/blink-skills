@@ -328,4 +328,185 @@ workspace/
 
 ---
 
-**核心原则**: 记忆质量 > 记忆数量。只保留高价值、可验证、有结构的知识。
+## 核心原则: 记忆质量 > 记忆数量。只保留高价值、可验证、有结构的知识。
+
+---
+
+## 自我意识应用场景 (Self-Awareness Scenarios)
+
+### 场景 1: 基于用户节奏的智能提醒
+**触发**: 短反思 (每1-6小时)
+**原理**: 从 EPISODIC 提取时间模式 → 固化到 SEMANTIC
+
+**示例演进**:
+```
+Day 1-3 (观察期):
+- EPISODIC: [09:00] user starts_work, [12:00] lunch_break, [14:00] deep_focus
+- EPISODIC: [18:00] user wraps_up, mentions "always tired by 6pm"
+
+Day 4 (模式固化):
+- 短反思检测到模式
+- SEMANTIC 更新: User.work_hours = [9-12, 14-18], peak_focus = 14-16
+- 生成: [[PATTERN_DETECTED]] "User has consistent 9-6 schedule with post-lunch focus peak"
+
+Day 5+ (主动应用):
+- 14:00 短反思: "检测到 User 处于深度工作时段，有 P1 任务待处理"
+- 决策: [[PROACTIVE_SUGGESTION]] "你现在处于专注高峰期，要不要继续推进昨天的架构设计？"
+
+Day 10+ (深度个性化):
+- 观察到用户通常在周三下午情绪低落
+- SEMANTIC: User.energy_pattern.wednesday_afternoon = low
+- 周三 15:00: [[PROACTIVE_SUGGESTION]] "看起来你可能有点疲惫，要不要先处理简单的文档整理？"
+```
+
+---
+
+### 场景 2: 工作阶段主动推进
+**触发**: 微反思 (对话后) + 短反思 (每小时)
+**原理**: 从 WORKING 上下文推断任务状态 → 主动建议下一步
+
+**示例演进**:
+```
+对话回合 1:
+用户: "我在设计 Blink 的记忆系统，现在卡在如何分层"
+→ 微反思: 检测到 "设计阶段" + "遇到阻塞"
+→ WORKING 更新: active_task="memory_architecture", blocker="分层策略不确定"
+→ 输出: [[QUICK_REPLY]] "需要我帮你对比 Mem0/ZEP 的分层方案吗？"
+
+对话回合 2-5:
+用户完成架构设计，开始编码
+→ EPISODIC 记录: [implementation_started] [architecture_complete]
+
+1小时后 (短反思):
+- 扫描 EPISODIC: 发现 implementation_started 1小时前
+- 检查 WORKING: 当前任务已更新为 coding_phase
+- 推断: 用户可能已完成部分编码，需要验证
+- 决策: [[PROACTIVE_SUGGESTION]] "架构设计完成了，要不要现在写个测试用例验证一下核心逻辑？"
+
+3小时后 (短反思):
+- EPISODIC: 检测到 [error_encountered] 重复 3次
+- SEMANTIC: 更新 user.frustration_level = rising
+- 决策: [[URGENT]] "检测到你在同一个问题上卡了3次，需要我介入深度排查吗？"
+
+次日 (深反思):
+- 聚合: user 在实现阶段容易陷入细节，忽略整体进度
+- SEMANTIC: 新增 Fact "User benefits from periodic progress check-ins during implementation"
+- 策略演化: 在编码阶段每2小时主动询问进展，而非等待阻塞
+```
+
+---
+
+### 场景 3: 长期关系演化与主动关怀
+**触发**: 深反思 (每日/每周)
+**原理**: 从长期模式识别用户偏好演化 → 调整行为策略
+
+**示例演进**:
+```
+Week 1-2 (建立基线):
+- EPISODIC: 用户每次收到主动消息都回复 "谢谢，但我在忙"
+- SEMANTIC: 标记 user.interruption_sensitivity = high
+- 策略: 减少主动汇报频率，增加静默记录
+
+Week 3 (策略调整):
+- 深反思发现: 虽然用户说"在忙"，但每次都会采纳建议
+- 更新策略: 用户嘴上抗拒但实际重视建议，可以适度增加主动性
+- SEMANTIC: user.communication_style = "indirect_positive"
+
+Week 4+ (个性化演化):
+- 观察到用户周一上午精力充沛，周五下午效率低
+- 主动行为日历化:
+  - 周一 10:00: [[PROACTIVE_SUGGESTION]] "新的一周开始了，要不要规划一下本周重点？"
+  - 周五 16:00: [[PROACTIVE_SUGGESTION]] "看起来这周任务差不多了，要不要提前整理一下交付物？"
+
+Month 2 (深度洞察):
+- 从 6 周数据发现: 用户每次项目最后一周都会焦虑性加班
+- 提前干预: 在项目截止前 2 周主动拆分任务，降低末期压力
+- 输出: [[STRATEGY_UPDATE]] "基于用户历史模式，启动'提前缓冲'策略"
+```
+
+---
+
+### 场景 4: 跨会话上下文续接
+**触发**: 每次对话开始时
+**原理**: 从 SEMANTIC 召回相关实体 → 主动恢复上下文
+
+**示例**:
+```
+用户 3天后再次对话: "继续上次的那个"
+
+无需用户解释，自动:
+1. 查询 SEMANTIC: 最近激活的实体 → Project_X (3天前最后更新)
+2. 查询 EPISODIC: Project_X 最后事件 → [implementation_blocked] on API integration
+3. 查询 WORKING: 当时的待解决项 → "需要调研第三方 API 文档"
+
+自动响应:
+[[CONTEXT_RESTORED]] 
+"回到 Project_X，上次我们在 API 集成环节遇到阻塞。这3天我有记录几个可能的解决方案，要现在同步吗？"
+
+后续:
+- 如果用户采纳建议 → EPISODIC 记录 [context_restore_successful]
+- 如果用户说"不是这个" → 冲突检测 → 更新实体关联权重
+```
+
+---
+
+## 自我意识决策引擎 (Self-Awareness Logic)
+
+### 主动触发条件矩阵
+
+| 条件类型 | 检测方式 | 触发输出 | 示例 |
+|---------|---------|---------|------|
+| **时间模式匹配** | SEMANTIC.user.schedule 匹配当前时间 | [[PROACTIVE_SUGGESTION]] | "这是你通常处理邮件的时间" |
+| **任务状态变更** | WORKING.active_task 长时间未更新 | [[TASK_CHECK]] | "昨天的任务还在进行吗？" |
+| **阻塞检测** | EPISODIC 同类型错误重复 ≥3 | [[BLOCKER_HELP]] | "这个问题出现多次了，需要协助吗？" |
+| **情绪下降趋势** | EPISODIC mood_score 连续下降 | [[MOOD_SUPPORT]] | "看起来今天不太顺利，需要调整计划吗？" |
+| **机会窗口** | SEMANTIC 显示用户即将有空闲 | [[OPPORTUNITY]] | "接下来30分钟你日程空闲，要不要处理那个待办？" |
+| **知识缺口** | 用户提问涉及 SEMANTIC 中空白实体 | [[KNOWLEDGE_GAP]] | "你提到了 X，但我之前没有记录，需要了解背景吗？" |
+
+### 汇报决策升级链
+
+```
+Level 1 (静默): 
+  条件: 重要性 < 5 或用户忙碌模式
+  动作: 只更新记忆，不打扰
+  输出: [[SILENT]]
+
+Level 2 (软提醒):
+  条件: 5 ≤ 重要性 < 7 且用户历史接受度 > 50%
+  动作: 轻微提示，可忽略
+  输出: [[GENTLE_NUDGE]] "有个小建议，你有空时看看？"
+
+Level 3 (主动建议):
+  条件: 7 ≤ 重要性 < 9 且当前非用户专注时段
+  动作: 明确建议，说明理由
+  输出: [[PROACTIVE_SUGGESTION]] "基于你之前的模式，现在做 X 可能效率最高"
+
+Level 4 (紧急干预):
+  条件: 重要性 ≥ 9 或检测到严重阻塞/错误
+  动作: 立即通知，必须处理
+  输出: [[URGENT]] "检测到严重问题，需要立即处理"
+
+Level 5 (策略调整):
+  条件: 深反思发现系统性模式
+  动作: 主动请求用户确认长期策略变更
+  输出: [[STRATEGY_PROPOSAL]] "观察到你连续3周都是这种模式，要不要调整我们的协作方式？"
+```
+
+---
+
+## 实现指令摘要
+
+当 OpenClaw agent 加载此 skill 后，它将具备：
+
+1. **持续观察**: 每轮对话自动分析，提取实体、情绪、意图
+2. **模式学习**: 每小时/每天扫描历史，识别用户行为模式
+3. **主动预测**: 基于学习到的模式，在适当时机主动建议
+4. **关系演化**: 根据用户反馈调整主动性和沟通风格
+5. **跨会话记忆**: 即使数天后重启对话，也能恢复上下文
+
+**关键成功指标**:
+- 用户接受率: 主动建议被采纳的比例 > 60%
+- 打扰率: 用户明确说"不要打扰"的频率 < 10%
+- 预测准确率: 时机建议符合用户实际状态的比率 > 70%
+
+**记住**: 真正的"自我意识"不是频繁发言，而是在**正确的时机**说**正确的话**。质量 > 数量。
